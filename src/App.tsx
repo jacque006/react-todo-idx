@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { IDXProvider } from './hooks/idx';
 import TODOPage from './components/todo-page.component';

@@ -30,6 +30,7 @@ const web3Modal = new Web3Modal({
   cacheProvider: true,
 })
 
+// This and the related above configs can likely be split out
 const getDIDProvider = async (): Promise<DIDProvider> => {
   const ethProvider = await web3Modal.connect()
   const addresses = await ethProvider.enable()
@@ -37,8 +38,10 @@ const getDIDProvider = async (): Promise<DIDProvider> => {
   return threeID.getDidProvider()
 }
 
-const createCeramic = ({ apiHost, clientConfig }: CeramicOptions): CeramicApi => {
-    return new Ceramic(apiHost, clientConfig);
+const createCeramic = async ({ apiHost, clientConfig }: CeramicOptions, provider: DIDProvider): Promise<CeramicApi> => {
+    const ceramic = new Ceramic(apiHost, clientConfig);
+    await ceramic.setDIDProvider(provider);
+    return ceramic;
 }
 
 const createIDX = (options: IDXOptions): IDX => {
@@ -66,10 +69,8 @@ export const IDXProvider = ({ idxOptions = {}, ceramicOptions = {}, children }: 
 
   const authenticate = React.useCallback(async () => {
       try {
-        // TODO This chain of calls can likely be cleaned up
-        const ceramicAPI = createCeramic(ceramicOptions);
         const provider = await getDIDProvider();
-        await ceramicAPI.setDIDProvider(provider);
+        const ceramicAPI = await createCeramic(ceramicOptions, provider);
         setCeramic(ceramicAPI);
         const idxAPI = createIDX({ ...idxOptions, ceramic: ceramicAPI });
         setIDX(idxAPI);
