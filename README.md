@@ -1,4 +1,5 @@
-# Getting Started with Create React App
+# react-todo-idx
+ETHDenver React TODO App using IDX
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
