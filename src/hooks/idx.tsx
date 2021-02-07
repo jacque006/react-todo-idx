@@ -56,7 +56,6 @@ export const useIDX = () => React.useContext(IDXContext);
 export const IDXProvider = ({ idxOptions = {}, ceramicOptions = {}, children }: PropsWithChildren) => {
   const [ceramic, setCeramic] = React.useState<CeramicApi | undefined>()
   const [idx, setIDX] = React.useState<IDX | undefined>()
-  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false)
   const [error, setError] = React.useState<Error | undefined>()
 
   const contextValue = React.useMemo(() => ({
@@ -64,23 +63,26 @@ export const IDXProvider = ({ idxOptions = {}, ceramicOptions = {}, children }: 
     did: ceramic?.did,
     idx,
     error,
-    isAuthenticated,
-  }), [ceramic, idx, error, isAuthenticated]);
+    isAuthenticated: idx?.authenticated || false,
+  }), [ceramic, idx, error]);
 
   const authenticate = React.useCallback(async () => {
       try {
+        if (contextValue.isAuthenticated) {
+            return;
+        }
+
         const provider = await getDIDProvider();
         const ceramicAPI = await createCeramic(ceramicOptions, provider);
         setCeramic(ceramicAPI);
         const idxAPI = createIDX({ ...idxOptions, ceramic: ceramicAPI });
         setIDX(idxAPI);
 
-        setIsAuthenticated(true);
         setError(undefined);
       } catch (err) {
         setError(err);
       }
-  }, [ceramicOptions, idxOptions]);
+  }, [ceramicOptions, idxOptions, contextValue]);
 
   React.useEffect(() => {
     authenticate();
