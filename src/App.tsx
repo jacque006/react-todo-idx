@@ -1,21 +1,18 @@
 import React from 'react';
-import './App.css';
 import { ThemeProvider } from './providers/theme-provider.component';
 import { IDXProvider } from './hooks/idx';
 import TODOPage from './components/todo-page.component';
+import AppBar from './components/app-bar.component';
 
 export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <ThemeProvider>
-          <IDXProvider ceramicOptions={{
-            apiHost: 'https://ceramic-clay.3boxlabs.com',
-          }}>
-            <TODOPage />
-          </IDXProvider>
-        </ThemeProvider>
-      </header>
-    </div>
+    <ThemeProvider>
+      <IDXProvider ceramicOptions={{
+        apiHost: 'https://ceramic-clay.3boxlabs.com',
+      }}>
+        <AppBar />
+        <TODOPage />
+      </IDXProvider>
+    </ThemeProvider>
   );
 }
