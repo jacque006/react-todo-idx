@@ -3,6 +3,14 @@ ETHDenver React TODO App using IDX
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## setup
+
+Install (NodeJS)[https://nodejs.org], Latest LTS recommended.
+
+```bash
+npm install
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
